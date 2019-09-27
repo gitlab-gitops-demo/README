@@ -20,3 +20,5 @@ source of truth for Infrastructure and Application management.
         └── templates
 ```
 
+### Visual Representation
+![GitOps-Demo.svg](GitOps-Demo.svg)
