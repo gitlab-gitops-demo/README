@@ -36,11 +36,16 @@ source of truth for Infrastructure and Application management.
 
 
 ### To reproduce this demo within your own group
-1. Create a top level group (i.e. gitops-demo)
+1. Create a top level group in GitLab (i.e. gitops-demo)
+1. Create an orginization (i.e. gitops-demo) and workspace named `gitlab-manage` on `https://app.terraform.io`. Change the Workspace Execution mode to `Local`
 1. Clone the [GitLab Manage](https://gitlab.com/gitops-demo/gitlab-manage) repository into that group.
-    * Add en Environment Variable to this project called `GITLAB_TOKEN` with a personal access token with rights to the top level group.
-    * Adjust the group and user names in the *.tf files.
-    * Ensure the tfstate configuration is set to the correct location.
+    * Add an Environment Variable to this project called `GITLAB_TOKEN` with a personal access token with rights to the top level group.
+    * Add an Environment File to this project called `TF_CLI_CONFIG_FILE` with the folling format for a value.
+        ```
+        credentials "app.terraform.io" {token = "my-token-from-tf-cloud"}
+        ```
+
+    * Adjust the groups and user names in the *.tf files.
     * Run the CI to deploy all the changes.
 1. Clone all the projects into the proper groups.
 1. Add the following Environment Variable to the `apps` and `infra` groups.
