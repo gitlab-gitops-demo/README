@@ -29,7 +29,7 @@ source of truth for Infrastructure and Application management.
 
 *gitlab-manage* - terraform code to represent the gitops-demo group configuration on gitlab.com.
 
-*apps/\** - applicaiton and CI/CD code, one per application.
+*apps/\** - application and CI/CD code, one per application.
 
 *infra/\** - terraform code to represent each cloud's configuration (vpc, security groups, and cluster configuration)
 
@@ -37,10 +37,10 @@ source of truth for Infrastructure and Application management.
 
 ### To reproduce this demo within your own group
 1. Create a top level group in GitLab (i.e. gitops-demo)
-1. Create an orginization (i.e. gitops-demo) and workspace named `gitlab-manage` on `https://app.terraform.io`. Change the Workspace Execution mode to `Local`
+1. Create an organization (i.e. gitops-demo) and workspace named `gitlab-manage` on `https://app.terraform.io`. Change the Workspace Execution mode to `Local`
 1. Clone the [GitLab Manage](https://gitlab.com/gitops-demo/gitlab-manage) repository into that group.
     * Add an Environment Variable to this project called `GITLAB_TOKEN` with a personal access token with rights to the top level group.
-    * Add an Environment File to this project called `TF_CLI_CONFIG_FILE` with the folling format for a value.
+    * Add an Environment File to this project called `TF_CLI_CONFIG_FILE` with the following format for a value.
         ```
         credentials "app.terraform.io" {token = "my-token-from-tf-cloud"}
         ```
@@ -48,11 +48,21 @@ source of truth for Infrastructure and Application management.
     * Adjust the groups and user names in the *.tf files.
     * Run the CI to deploy all the changes.
 1. Clone all the projects into the proper groups.
-1. Add the following Environment Variable to the `apps` and `infra` groups.
-    * Add env var docs here.
+1. Add the following Environment Variables to the `infra` group.
+| Variable Name | 
+| ------ | 
+| AWS_ACCESS_KEY_ID | 
+| AWS_REGION | 
+| AWS_SECRET_ACCESS_KEY |
+| GITLAB_TOKEN |
+| GOOGLE_CREDENTIALS |
+| GOOGLE_PROJECT |
+| GOOGLE_REGION |
+| TF_CLI_CONFIG_FILE |
+
 1. Run the CI to create the infrastructure.
-1. Run CI on each project to deply each application.
+1. Run CI on each project to deploy each application.
 
 #### Clean up
-1. To clean up the infrastructure, envoke the manual action for `destroy` on each of the aws and gcp projects.
+1. To clean up the infrastructure, invoke the manual action for `destroy` on each of the aws and gcp projects.
 
