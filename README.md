@@ -49,6 +49,7 @@ source of truth for Infrastructure and Application management.
     * Run the CI to deploy all the changes.
 1. Clone all the projects into the proper groups.
 1. Add the following Environment Variables to the `infra` group.
+
 | Variable Name | 
 | ------ | 
 | AWS_ACCESS_KEY_ID | 
