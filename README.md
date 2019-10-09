@@ -71,5 +71,5 @@ source of truth for Infrastructure and Application management.
 1. Run CI on each project to deploy each application.
 
 #### Clean up
-1. To clean up the infrastructure, invoke the manual action for `destroy` on each of the aws and gcp projects.
+1. To clean up the infrastructure, invoke the manual action for `destroy` on each of the infra projects.
 
