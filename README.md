@@ -60,6 +60,12 @@ source of truth for Infrastructure and Application management.
 | GOOGLE_PROJECT |
 | GOOGLE_REGION |
 | TF_CLI_CONFIG_FILE |
+| ARM_SUBSCRIPTION_ID |
+| ARM_CLIENT_ID |
+| ARM_CLIENT_SECRET |
+| ARM_TENANT_ID |
+| TF_VAR_client_id |
+| TF_VAR_client_secret |
 
 1. Run the CI to create the infrastructure.
 1. Run CI on each project to deploy each application.
