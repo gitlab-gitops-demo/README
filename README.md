@@ -10,13 +10,13 @@ source of truth for Infrastructure and Application management.
     ├── gitlab-manage
     ├── apps
     │   ├── my-asp-net-app1
-    │   ├── my-dotnet-app1
     │   ├── my-python-app4
     │   ├── my-ruby-app3
     │   └── my-spring-app2
     └── infra
         ├── aws
         ├── gcp
+        ├── azure
         └── templates
 ```
 
