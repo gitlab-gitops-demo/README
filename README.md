@@ -67,6 +67,7 @@ source of truth for Infrastructure and Application management.
 | TF_VAR_client_id |
 | TF_VAR_client_secret |
 
+1. In your organization (i.e. gitops-demo) add workspaces named `aws`, `gcp`, and `azure` on `https://app.terraform.io`. Change the Workspace Execution mode to `Local` on all three.
 1. Run the CI to create the infrastructure.
 1. Run CI on each project to deploy each application.
 
