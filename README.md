@@ -44,9 +44,12 @@ source of truth for Infrastructure and Application management.
         ```
         credentials "app.terraform.io" {token = "my-token-from-tf-cloud"}
         ```
-
+    * ![gitlab-manage-ci-var.png](gitlab-manage-ci-var.png)
     * Adjust the groups and user names in the *.tf files.
-    * Run the CI to deploy all the changes.
+        * `backend.tf#4` 
+        * `groups.tf#2`
+        * `group_members.tf#2`
+    * Run the CI pipeline on the `master` branch to deploy all the changes.
 1. Clone all the projects into the proper groups.
 1. Add the following Environment Variables to the `infra` group.
 
@@ -68,7 +71,8 @@ source of truth for Infrastructure and Application management.
 | TF_VAR_client_secret |
 
 1. In your organization (i.e. gitops-demo) add workspaces named `aws`, `gcp`, and `azure` on `https://app.terraform.io`. Change the Workspace Execution mode to `Local` on all three.
-1. Run the CI to create the infrastructure.
+1. Update `backend.tf` to match the orginization and workspace names created.
+1. Run the CI on each infra project to create the infrastructure.
 1. Run CI on each project to deploy each application.
 
 #### Clean up
