@@ -36,9 +36,10 @@ source of truth for Infrastructure and Application management.
 
 
 ### To reproduce this demo within your own group
-1. Create a top level group in GitLab (i.e. gitops-demo)
+1. Fork the entire group structure into your own namespace:
+   * You can use [Group Fork](https://gitlab.com/bdowney/gitlab-group-fork) to copy the entire group to a new namespace **OR** manually create group structure and clone projects.
 1. Create an organization (i.e. gitops-demo) and workspace named `gitlab-manage` on `https://app.terraform.io`. Change the Workspace Execution mode to `Local`
-1. Clone the [GitLab Manage](https://gitlab.com/gitops-demo/gitlab-manage) repository into that group.
+1. Within the [GitLab Manage](https://gitlab.com/gitops-demo/gitlab-manage) Project Settings:
     * Add an Environment Variable to this project called `GITLAB_TOKEN` with a personal access token with rights to the top level group.
     * Add an Environment File to this project called `TF_CLI_CONFIG_FILE` with the following format for a value.
         ```
@@ -73,7 +74,7 @@ source of truth for Infrastructure and Application management.
 1. In your organization (i.e. gitops-demo) add workspaces named `aws`, `gcp`, and `azure` on `https://app.terraform.io`. Change the Workspace Execution mode to `Local` on all three.
 1. Update `backend.tf` to match the orginization and workspace names created.
 1. Run the CI on each infra project to create the infrastructure.
-1. Run CI on each project to deploy each application.
+1. Run CI on each project to deploy each application. You may need to perform a [`terraform import`](https://www.terraform.io/docs/import/index.html) to match the manually created resources on the first run.
 
 #### Clean up
 1. To clean up the infrastructure, invoke the manual action for `destroy` on each of the infra projects.
