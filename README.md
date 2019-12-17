@@ -38,6 +38,7 @@ source of truth for Infrastructure and Application management.
 ### To reproduce this demo within your own group
 1. Fork the entire group structure into your own namespace:
    * You can use [Group Fork](https://gitlab.com/bdowney/gitlab-group-fork) to copy the entire group to a new namespace **OR** manually create group structure and clone projects.
+   * You can then use [GitLab Cloner](https://gitlab.com/mtcs.io/gitlab-cloner) to download all projects locally.
 1. Create an organization (i.e. gitops-demo) and workspace named `gitlab-manage` on `https://app.terraform.io`. Change the Workspace Execution mode to `Local`
 1. Within the [GitLab Manage](https://gitlab.com/gitops-demo/gitlab-manage) Project Settings:
     * Add an Environment Variable to this project called `GITLAB_TOKEN` with a personal access token with rights to the top level group.
