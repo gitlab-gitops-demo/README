@@ -9,6 +9,7 @@ source of truth for Infrastructure and Application management.
     ├── readme
     ├── gitlab-manage
     ├── apps
+    |   ├── cluster-management
     │   ├── my-asp-net-app1
     │   ├── my-python-app4
     │   ├── my-ruby-app3
@@ -30,6 +31,8 @@ source of truth for Infrastructure and Application management.
 *gitlab-manage* - terraform code to represent the gitops-demo group configuration on gitlab.com.
 
 *apps/\** - application and CI/CD code, one per application.
+
+*apps/cluster-management* - project for installation of [GitLab Managed Applications, installed via CI/CD](https://docs.gitlab.com/ee/user/clusters/applications.html#install-using-gitlab-ci-alpha)
 
 *infra/\** - terraform code to represent each cloud's configuration (vpc, security groups, and cluster configuration)
 
