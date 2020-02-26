@@ -74,6 +74,7 @@ source of truth for Infrastructure and Application management.
 | ARM_TENANT_ID |
 | TF_VAR_client_id |
 | TF_VAR_client_secret |
+| CLUSTER_MANAGEMENT_PROJECT_ID |
 
 1. In your organization (i.e. gitops-demo) add workspaces named `aws`, `gcp`, and `azure` on `https://app.terraform.io`. Change the Workspace Execution mode to `Local` on all three.
 1. Update `backend.tf` to match the orginization and workspace names created.
