@@ -56,28 +56,36 @@ source of truth for Infrastructure and Application management.
         * `group_members.tf#2`
     * Run the CI pipeline on the `master` branch to deploy all the changes.
 1. Clone all the projects into the proper groups.
+
+### Using Vault for Secrets
+More on this soon.
+
+### Using GitLab Environment Variables
 1. Add the following Environment Variables to the `infra` group.
 
-| Variable Name | 
-| ------ | 
-| AWS_ACCESS_KEY_ID | 
-| AWS_REGION | 
-| AWS_SECRET_ACCESS_KEY |
-| GITLAB_TOKEN |
-| GOOGLE_CREDENTIALS |
-| GOOGLE_PROJECT |
-| GOOGLE_REGION |
-| TF_CLI_CONFIG_FILE |
-| ARM_SUBSCRIPTION_ID |
-| ARM_CLIENT_ID |
-| ARM_CLIENT_SECRET |
-| ARM_TENANT_ID |
-| TF_VAR_client_id |
-| TF_VAR_client_secret |
-| CLUSTER_MANAGEMENT_PROJECT_ID |
+| Variable Name | Description |
+| ------ | ------ |
+| AWS_ACCESS_KEY_ID | EKS and VPC provisioning |
+| AWS_SECRET_ACCESS_KEY | EKS and VPC provisioning |
+| AWS_REGION | AWS Region for deployment |
+| GITLAB_TOKEN | To add K8s clusters to GitLab Group |
+| GOOGLE_CREDENTIALS | GKE provisioning |
+| GOOGLE_PROJECT | GKE provisioning |
+| GOOGLE_REGION | GCP Region for deployment |
+| TF_CLOUD_TOKEN | For app.terraform.io state management |
+| ARM_SUBSCRIPTION_ID | AKS provisioning |
+| ARM_CLIENT_ID | AKS provisioning |
+| ARM_CLIENT_SECRET | AKS provisioning |
+| ARM_TENANT_ID | AKS provisioning |
+| CLUSTER_MANAGEMENT_PROJECT_ID | Project ID that will install GitLab Managed Apps on K8s |
+
+### Using GitLab for Terraform state management
+More on this soon.
+
+### Using Terraform Cloud for state management
 
 1. In your organization (i.e. gitops-demo) add workspaces named `aws`, `gcp`, and `azure` on `https://app.terraform.io`. Change the Workspace Execution mode to `Local` on all three.
-1. Update `backend.tf` to match the orginization and workspace names created.
+1. Update `backend.tf` to match the orginization and workspace names created. [Example](https://gitlab.com/gitops-demo/infra/gcp/-/blob/71d1b138e58bc20f1ee86d7937a9f85f50a75481/backend.tf)
 1. Run the CI on each infra project to create the infrastructure.
 1. Run CI on each project to deploy each application. You may need to perform a [`terraform import`](https://www.terraform.io/docs/import/index.html) to match the manually created resources on the first run.
 
