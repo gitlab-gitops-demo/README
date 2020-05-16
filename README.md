@@ -58,7 +58,26 @@ source of truth for Infrastructure and Application management.
 1. Clone all the projects into the proper groups.
 
 ### Using Vault for Secrets
-More on this soon.
+This demo project is using [Hashicorp Vault](https://www.vaultproject.io/) for secrets now. If you do not want to use Vault, see the next section on how to add secrets to Environment Variables.
+
+Each secret needed (see below) is added to vault at the following locations and referenced by a configuration file in `.vault/envconsul.hcl` of each project. 
+```
+secret/infrastructure/aws
+secret/infrastructure/gitlab
+secret/infrastructure/gcp
+secret/infrastructure/terraform
+secret/infrastructure/azure
+```
+
+The `before_script` will need to have the `*envconsul` element added to access Vault secrets. 
+
+```yaml
+before_script:
+  - *install-curl-jq
+  - *envconsul # Use this to access Vault secrets. 
+  - *gitlab-tf-backend  # Use this for GitLab TF State Backend
+``` 
+
 
 ### Using GitLab Environment Variables
 1. Add the following Environment Variables to the `infra` group.
@@ -103,7 +122,7 @@ If you are using the `.gitlab-ci.yml` [template in this group](https://gitlab.co
 ```yaml
 before_script:
   - *install-curl-jq
-  - *envconsul
+  - *envconsul # Use this to access Vault secrets. 
   - *gitlab-tf-backend  # Use this for GitLab TF State Backend
 ```
 
@@ -111,7 +130,7 @@ before_script:
 ### Using Terraform Cloud for state management
 
 1. In your organization (i.e. gitops-demo) add workspaces named `aws`, `gcp`, and `azure` on `https://app.terraform.io`. Change the Workspace Execution mode to `Local` on all three.
-1. Update `backend.tf` to match the orginization and workspace names created. [Example](https://gitlab.com/gitops-demo/infra/gcp/-/blob/71d1b138e58bc20f1ee86d7937a9f85f50a75481/backend.tf)
+2. Update `backend.tf` to match the orginization and workspace names created.
 
 ```hcl
 terraform {
@@ -136,8 +155,8 @@ before_script:
 ```
 
 
-1. Run the CI on each infra project to create the infrastructure.
-1. Run CI on each project to deploy each application. You may need to perform a [`terraform import`](https://www.terraform.io/docs/import/index.html) to match the manually created resources on the first run.
+3. Run the CI on each infra project to create the infrastructure.
+4. Run CI on each project to deploy each application. You may need to perform a [`terraform import`](https://www.terraform.io/docs/import/index.html) to match the manually created resources on the first run.
 
 #### Clean up
 1. To clean up the infrastructure, invoke the manual action for `destroy` on each of the infra projects.
