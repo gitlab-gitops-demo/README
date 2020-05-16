@@ -80,12 +80,62 @@ More on this soon.
 | CLUSTER_MANAGEMENT_PROJECT_ID | Project ID that will install GitLab Managed Apps on K8s |
 
 ### Using GitLab for Terraform state management
-More on this soon.
+Two options for terraform state management. One is to use [GitLab itself](https://docs.gitlab.com/ee/user/infrastructure/index.html), this is an [Alpha Feature](https://docs.gitlab.com/ee/administration/terraform_state.html). The second option is to use Terraform Cloud which offers other features. See the next section. 
+
+*Using GitLab TF State*
+Edit each `backend.tf` file to the proper url, including `project_id` in the url. 
+```hcl
+terraform {
+  backend "http" {
+    address        = "https://gitlab.com/api/v4/projects/14379215/terraform/state/aws"
+    lock_address   = "https://gitlab.com/api/v4/projects/14379215/terraform/state/aws/lock"
+    unlock_address = "https://gitlab.com/api/v4/projects/14379215/terraform/state/aws/lock"
+    username       = "tf"
+    lock_method    = "POST"
+    unlock_method  = "DELETE"
+    retry_wait_min = "5"
+  }
+}
+```
+
+If you are using the `.gitlab-ci.yml` [template in this group](https://gitlab.com/gitops-demo/infra/templates/-/blob/master/terraform.gitlab-ci.yml), you need to check the matching backend `before_script:` is being used. 
+
+```yaml
+before_script:
+  - *install-curl-jq
+  - *envconsul
+  - *gitlab-tf-backend  # Use this for GitLab TF State Backend
+```
+
 
 ### Using Terraform Cloud for state management
 
 1. In your organization (i.e. gitops-demo) add workspaces named `aws`, `gcp`, and `azure` on `https://app.terraform.io`. Change the Workspace Execution mode to `Local` on all three.
 1. Update `backend.tf` to match the orginization and workspace names created. [Example](https://gitlab.com/gitops-demo/infra/gcp/-/blob/71d1b138e58bc20f1ee86d7937a9f85f50a75481/backend.tf)
+
+```hcl
+terraform {
+  backend "remote" {
+    hostname     = "app.terraform.io"
+    organization = "gitops-demo"
+
+    workspaces {
+      name = "gcp"
+    }
+  }
+}
+```
+
+If you are using the `.gitlab-ci.yml` [template in this group](https://gitlab.com/gitops-demo/infra/templates/-/blob/master/terraform.gitlab-ci.yml), you need to check the matching backend `before_script:` is being used. 
+
+```yaml
+before_script:
+  - *install-curl-jq
+  - *envconsul
+  - *tf-cloud-backend  # Use this for Terraform Cloud State Backend
+```
+
+
 1. Run the CI on each infra project to create the infrastructure.
 1. Run CI on each project to deploy each application. You may need to perform a [`terraform import`](https://www.terraform.io/docs/import/index.html) to match the manually created resources on the first run.
 
