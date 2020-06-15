@@ -22,7 +22,7 @@ source of truth for Infrastructure and Application management.
 ```
 
 ### Visual Representation
-![GitOps-Demo.svg](GitOps-Demo.svg)
+![GitOps-Demo.png](GitOps-Demo.png)
 
 ### Repository Purpose
 
