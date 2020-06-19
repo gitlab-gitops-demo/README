@@ -36,6 +36,14 @@ source of truth for Infrastructure and Application management.
 
 *infra/\** - terraform code to represent each cloud's configuration (vpc, security groups, and cluster configuration)
 
+### Security
+It's important to remember that secrets should never be placed into configuration files in the respository. Use of Environment Variables or Vault is recomended. 
+
+Terrafrom has specific recomendations on sensitive information, such as data in state and plan files. Read more at the links below.
+* https://www.terraform.io/docs/state/sensitive-data.html
+* https://www.terraform.io/docs/commands/plan.html#security-warning
+
+This project uses GitLab Artifacts to pass plan files between jobs. These files may contain sensitive information. Ensure your project does not expose these files to unauthorized persons. You can [restrict the visability](https://docs.gitlab.com/ee/user/project/settings/#sharing-and-permissions) of the CI/CD Pipelines to only project members. 
 
 
 ### To reproduce this demo within your own group
