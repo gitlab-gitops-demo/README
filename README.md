@@ -83,7 +83,7 @@ before_script:
 | AWS_ACCESS_KEY_ID | EKS and VPC provisioning |
 | AWS_SECRET_ACCESS_KEY | EKS and VPC provisioning |
 | AWS_REGION | AWS Region for deployment |
-| GITLAB_TOKEN | To add K8s clusters to GitLab Group |
+| GITLAB_TOKEN | PAC To add K8s clusters to GitLab Group |
 | GOOGLE_CREDENTIALS | GKE provisioning |
 | GOOGLE_PROJECT | GKE provisioning |
 | GOOGLE_REGION | GCP Region for deployment |
