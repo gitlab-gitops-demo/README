@@ -18,6 +18,7 @@ source of truth for Infrastructure and Application management.
         ├── aws
         ├── gcp
         ├── azure
+        ├── kas-gcp
         └── templates
 ```
 
@@ -56,7 +57,7 @@ TODO: Document each file location.
 ### Using Vault for Secrets
 The `gitops-demo/infra/*` projects are using [Hashicorp Vault](https://www.vaultproject.io/) for secrets now. If you do not want to use Vault, see the next section on how to add secrets to Environment Variables.
 
-Each secret needed (see below) is added to vault at the following locations and referenced by a configuration file in `.vault/envconsul.hcl` of each project. 
+Each secret needed (see below) is added to vault at the following locations and referenced by the `gitlab-ci.yml` file in each project. 
 ```
 secret/infrastructure/aws
 secret/infrastructure/gitlab
@@ -65,17 +66,27 @@ secret/infrastructure/terraform
 secret/infrastructure/azure
 ```
 
-The `before_script` will need to have the `*envconsul` element added to access Vault secrets. 
-
+Example secret reference from `infra/aws/.gitlab-ci.yml`
 ```yaml
+.secrets:
+  secrets:
+    AWS_ACCESS_KEY_ID_FILE:
+      vault: infrastructure/aws/AWS_ACCESS_KEY_ID@secret
+    AWS_SECRET_ACCESS_KEY_FILE:
+      vault: infrastructure/aws/AWS_SECRET_ACCESS_KEY@secret
+    AWS_REGION_FILE:
+      vault: infrastructure/aws/AWS_REGION@secret
+    GITLAB_TOKEN_FILE:
+      vault: infrastructure/gitlab/GITLAB_TOKEN@secret
+
 before_script:
-  - *install-curl-jq
-  - *envconsul # Use this to access Vault secrets. 
-  - *gitlab-tf-backend  # Use this for GitLab TF State Backend
-``` 
+  - export AWS_ACCESS_KEY_ID=$(cat $AWS_ACCESS_KEY_ID_FILE)
+  - export AWS_SECRET_ACCESS_KEY=$(cat $AWS_SECRET_ACCESS_KEY_FILE)
+  - export AWS_REGION=$(cat $AWS_REGION_FILE)
+  - export GITLAB_TOKEN=$(cat $GITLAB_TOKEN_FILE)
+```
 
-
-### Using GitLab Environment Variables
+### Using GitLab Environment Variables (in lieu of Vault Secrets)
 1. Add the following Environment Variables to the `infra` group.
 
 | Variable Name | Description |
@@ -100,24 +111,30 @@ Edit each `backend.tf` file to the proper url, including `project_id` in the url
 ```hcl
 terraform {
   backend "http" {
-    address        = "https://gitlab.com/api/v4/projects/14379215/terraform/state/aws"
-    lock_address   = "https://gitlab.com/api/v4/projects/14379215/terraform/state/aws/lock"
-    unlock_address = "https://gitlab.com/api/v4/projects/14379215/terraform/state/aws/lock"
-    username       = "tf"
-    lock_method    = "POST"
-    unlock_method  = "DELETE"
-    retry_wait_min = "5"
   }
 }
 ```
 
-If you are using the `.gitlab-ci.yml` [template in this group](https://gitlab.com/gitops-demo/infra/templates/-/blob/master/terraform.gitlab-ci.yml), you need to check the matching backend `before_script:` is being used. 
+To `terraform init` the project locally, you need to use the following example to set the backend.
+```bash
+terraform init -reconfigure -upgrade \
+    -backend-config="address=https://gitlab.com/api/v4/projects/14379212/terraform/state/production" \
+    -backend-config="lock_address=https://gitlab.com/api/v4/projects/14379212/terraform/state/production/lock" \
+    -backend-config="unlock_address=https://gitlab.com/api/v4/projects/14379212/terraform/state/production/lock" \
+    -backend-config="username=bdowney" \
+    -backend-config="password=$GITLAB_TOKEN" \
+    -backend-config="lock_method=POST" \
+    -backend-config="unlock_method=DELETE" \
+    -backend-config="retry_wait_min=5"
+```
+
+
+If you are using the `.gitlab-ci.yml` [template in this group](https://gitlab.com/gitops-demo/infra/templates/-/blob/master/terraform.gitlab-ci.yml), you need to check the matching backend `script:` is being used in each job. 
 
 ```yaml
-before_script:
-  - *install-curl-jq
-  - *envconsul # Use this to access Vault secrets. 
-  - *gitlab-tf-backend  # Use this for GitLab TF State Backend
+script:
+    - *install-curl-jq
+    - *gitlab-tf-backend  # Use this for GitLab TF State Backend
 ```
 
 
