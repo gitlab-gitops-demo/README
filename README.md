@@ -39,13 +39,13 @@ source of truth for Infrastructure and Application management.
 *infra/\** - terraform code to represent each cloud's configuration (vpc, security groups, and cluster configuration)
 
 ### Security
-It's important to remember that secrets should never be placed into configuration files in the respository. Use of Environment Variables or Vault is recomended. 
+It's important to remember that secrets should never be placed into configuration files in the repository. Use of Environment Variables or Vault is recommended. 
 
-Terrafrom has specific recomendations on sensitive information, such as data in state and plan files. Read more at the links below.
+Terraform has specific recommendations on sensitive information, such as data in state and plan files. Read more at the links below.
 * https://www.terraform.io/docs/state/sensitive-data.html
 * https://www.terraform.io/docs/commands/plan.html#security-warning
 
-This project creates files that may contain sensitive information. Ensure your project does not expose these files to unauthorized persons. You can [restrict the visability](https://docs.gitlab.com/ee/user/project/settings/#sharing-and-permissions) of the CI/CD Pipelines to only project members. 
+This project creates files that may contain sensitive information. Ensure your project does not expose these files to unauthorized persons. You can [restrict the visibility](https://docs.gitlab.com/ee/user/project/settings/#sharing-and-permissions) of the CI/CD Pipelines to only project members. 
 
 
 ### To reproduce this demo within your own group
@@ -140,12 +140,12 @@ script:
 
 
 ### Run the CI on each infra project to create the infrastructure.
-Naviagate to each project in `/apps/`, select Ci/CD, and Run Pipeline for the `master` branch. This will build, test, and deploy each app to the kubernetes clusters created. 
+Navigate to each project in `/apps/`, select Ci/CD, and Run Pipeline for the `master` branch. This will build, test, and deploy each app to the kubernetes clusters created. 
 
 ### GitOps Agent
 The [GitLab Kubernetes Agent](https://docs.gitlab.com/ee/user/clusters/agent/) is an active in-cluster component for solving GitLab and Kubernetes integration tasks in a secure and cloud-native way. Sometimes called ["Pull based GitOps"](https://www.gitops.tech/#pull-based-deployments). GitLab launched it's own [Kubernetes Agent](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent) based on the popular [GitOps Engine](https://github.com/argoproj/gitops-engine)
 
-The project in `infra/kas-gcp` has terrform code to create a GKE cluster, register an agent with GitLab, and install the agent within the cluster. It pulls a configuration file from that same repository. That configuration file points to a project in `apps/manifests` that describes one of the applications to deploy. A single run of `terraform apply` will create the cluster and install the applications in a single run.
+The project in `infra/kas-gcp` has terraform code to create a GKE cluster, register an agent with GitLab, and install the agent within the cluster. It pulls a configuration file from that same repository. That configuration file points to a project in `apps/manifests` that describes one of the applications to deploy. A single run of `terraform apply` will create the cluster and install the applications in a single run.
 
 Updates to the application are then described in the manifest file; the agent will detect these changes and install the new container images. 
 
