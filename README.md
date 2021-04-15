@@ -10,6 +10,7 @@ source of truth for Infrastructure and Application management.
     ├── gitlab-manage
     ├── apps
     |   ├── cluster-management
+    |   ├── manifests
     │   ├── my-asp-net-app1
     │   ├── my-python-app4
     │   ├── my-ruby-app3
@@ -141,6 +142,12 @@ script:
 ### Run the CI on each infra project to create the infrastructure.
 Naviagate to each project in `/apps/`, select Ci/CD, and Run Pipeline for the `master` branch. This will build, test, and deploy each app to the kubernetes clusters created. 
 
+### GitOps Agent
+The [GitLab Kubernetes Agent](https://docs.gitlab.com/ee/user/clusters/agent/) is an active in-cluster component for solving GitLab and Kubernetes integration tasks in a secure and cloud-native way. Sometimes called ["Pull based GitOps"](https://www.gitops.tech/#pull-based-deployments). GitLab launched it's own [Kubernetes Agent](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent) based on the popular [GitOps Engine](https://github.com/argoproj/gitops-engine)
+
+The project in `infra/kas-gcp` has terrform code to create a GKE cluster, register an agent with GitLab, and install the agent within the cluster. It pulls a configuration file from that same repository. That configuration file points to a project in `apps/manifests` that describes one of the applications to deploy. A single run of `terraform apply` will create the cluster and install the applications in a single run.
+
+Updates to the application are then described in the manifest file; the agent will detect these changes and install the new container images. 
 
 #### Clean up
 1. To clean up the infrastructure, invoke the manual action for `destroy` on each of the infra projects.
